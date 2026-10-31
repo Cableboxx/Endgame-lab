@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152333"><title>Endgame Lab · Expanded 332</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Endgame Lab"><style> 
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152333"><title>Endgame Lab · Studio edition</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Endgame Lab"><style> 
 :root{font-family:system-ui,-apple-system,sans-serif;color:#f3f7f8;background:#0e1720}
 *{box-sizing:border-box}body{margin:0}header{max-width:640px;margin:auto;padding:18px 18px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .brand h1{font-size:23px;letter-spacing:-.7px;margin:0}.brand small{display:block;margin-top:3px;font-size:12px}
@@ -61,7 +61,46 @@ select{width:100%;background:#0e1923;color:white;border:1px solid #486071;border
 .result-close{margin-top:14px;background:transparent;color:#aac1ca;font-size:12px}
 @keyframes fadein{from{opacity:0}to{opacity:1}}@keyframes risein{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){.result-overlay,.result-panel{animation:none}}
-.sound-setting{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 18px;color:#b8cbd2;font-size:14px}.sound-setting button{min-width:76px;padding:8px 12px;font-size:13px}</style></head><body><header><div class="brand"><h1>♙ Endgame Lab</h1><small>Practice winning endgames</small></div><span class="pill" id="engine-badge">Stockfish loading</span></header>
+.sound-setting{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 18px;color:#b8cbd2;font-size:14px}.sound-setting button{min-width:76px;padding:8px 12px;font-size:13px}
+.header-right{display:flex;align-items:center;gap:7px}.quick-sound{padding:6px 9px;border:1px solid #2a4249;background:#17252b;border-radius:9px;color:#b9d6d3;font-size:15px;min-width:32px}
+/* App-first interface: board is the focal point. */
+:root{background:#0b1118;color:#eaf1f2}
+body{min-height:100dvh;background:radial-gradient(ellipse at 50% 0%,#182a31 0%,#0b1118 68%)}
+header{max-width:570px;padding:17px 17px 9px}
+.brand h1{font-size:19px;font-weight:750;letter-spacing:-.6px}
+.brand small{font-size:10px;letter-spacing:.5px;color:#7f9a9e;margin-top:1px}
+.pill{font-size:10px;padding:6px 9px;background:#17252b;border-color:#2a4249;color:#a6babc;max-width:138px;overflow:hidden;text-overflow:ellipsis}
+main{max-width:570px;padding:0 9px 24px}
+.trainer{background:transparent;border:0;box-shadow:none;padding:3px 0 0;border-radius:0}
+.topline{padding:8px 9px 13px}
+.eyebrow{font-size:9px;letter-spacing:1.4px;color:#759196}
+.drilltitle{font-size:19px;line-height:1.25;margin-top:4px;max-width:270px}
+.goalchip{padding:6px 10px;background:#173b35;border:1px solid #2b574b;color:#a5dcc7;font-size:11px}
+.board{width:100%;border-radius:5px;box-shadow:0 0 0 1px #426269,0 8px 32px #0008}
+.piece-svg{width:81%;height:81%}
+.belowboard{margin:10px 9px 4px;color:#779198;font-size:10px}
+#verification{max-width:72%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.notice{font-size:12px;color:#b0c5c9;min-height:0;margin:7px 9px 13px;line-height:1.35}
+.actions{margin:0 3px;gap:8px}
+.actions button{border-radius:12px;font-size:12px;padding:12px 4px;background:#23353d;color:#c7d7d8;border:1px solid #31464b;font-weight:600}
+.actions button#next{background:#267d69;border-color:#2b967b;color:#fff}
+.actions button:active{transform:scale(.98)}
+.settings-card{background:transparent;border:0;border-top:1px solid #263940;border-radius:0;margin:17px 5px 0;padding:13px 3px}
+.settings-top .eyebrow{font-size:10px}
+.linkbutton{color:#94bcb2;font-size:12px}
+#settings-content{padding-top:14px}
+select{background:#14232a;border-color:#2e4951;border-radius:11px}
+.sound-setting{margin:5px 0 17px}
+.scan-details{margin-top:15px;border-top:1px solid #243941;padding:12px 0 2px;color:#819ca2;font-size:11px}
+.scan-details summary,.help-drawer summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.scan-details summary:after,.help-drawer summary:after{content:'⌄';font-size:17px}
+.scan-details[open] summary:after,.help-drawer[open] summary:after{content:'⌃'}
+.scanrow{margin-top:10px}
+.help-drawer{margin:3px 13px 12px;color:#718d92;font-size:11px;line-height:1.55}
+.help-drawer p{margin:9px 0}
+.result-panel{background:linear-gradient(160deg,#1c333a,#102129)}
+@media(min-width:700px){main{padding-top:4px}.board{max-width:540px;margin:auto}}
+</style></head><body><header><div class="brand"><h1>♙ Endgame Lab</h1><small>Endgame training</small></div><div class="header-right"><button type="button" id="quick-sound" class="quick-sound" aria-label="Toggle sound">♪</button><span class="pill" id="engine-badge">Stockfish loading</span></div></header>
 <main>
 <div id="setup"></div>
 <section class="trainer">
@@ -69,7 +108,7 @@ select{width:100%;background:#0e1923;color:white;border:1px solid #486071;border
 <div class="board" id="board" aria-label="Chessboard"></div>
 <div class="promotion" id="promotion"></div>
 <div class="belowboard"><span id="verification" class="muted">Checking Syzygy…</span><span id="progress-label">0 completed</span></div>
-<div class="notice" id="status">Preparing your endgame…</div>
+<div class="notice" id="status" aria-live="polite">Preparing your endgame…</div>
 <nav class="actions"><button id="solution" class="secondary">✦ Best move</button><button id="undo" class="secondary">↶ Undo</button><button id="restart" class="secondary">↻ Restart</button><button id="next">Next win →</button></nav>
 </section>
 <section class="settings-card">
@@ -80,7 +119,7 @@ select{width:100%;background:#0e1923;color:white;border:1px solid #486071;border
 <label class="label" for="drill">SELECT EXERCISE</label><select id="drill"></select>
 <div class="muted" id="description"></div>
 </div>
-<div class="scanrow"><span id="scan-progress" aria-live="polite">Checking positions…</span><button id="scan-retry" type="button" class="linkbutton">Retry failed</button></div>
+<details class="scan-details"><summary>Library verification</summary><div class="scanrow"><span id="scan-progress" aria-live="polite">Checking positions…</span><button id="scan-retry" type="button" class="linkbutton">Retry failed</button></div></details>
 </section>
 <button id="hint" hidden>Hint</button><span id="progress" hidden>0</span>
 <p class="footer">Only Syzygy-confirmed wins appear in Winning positions. New candidate positions are checked automatically and saved on this device. Stockfish 19 runs locally in your browser; tablebase checks require internet access.</p>
@@ -180,53 +219,29 @@ function animateMove(move,piece){
 }
 function tap(sq){if(!verified||busy||!engineReady||game.isGameOver()||game.turn()!=='w')return;const p=game.get(sq);if(selected){const moves=game.moves({square:selected,verbose:true}).filter(m=>m.to===sq);if(moves.length){if(moves.some(m=>m.flags.includes('p'))){const promotion=$('promotion');promotion.innerHTML='';for(const piece of ['q','r','b','n']){const btn=document.createElement('button');btn.textContent=glyph['w'+piece];btn.onclick=()=>{promotion.classList.remove('show');doMove({from:selected,to:sq,promotion:piece})};promotion.appendChild(btn)}promotion.classList.add('show')}else doMove({from:selected,to:sq});return}}selected=p?.color==='w'?sq:null;render()}
 // Original, subtle Web Audio effects. No downloads or external audio files.
-let soundOn=true,audioCtx=null;
+// Short embedded WAV samples: no synthesizer oscillators or external audio downloads.
+let soundOn=true;
 try{soundOn=localStorage.getItem('endgame-lab-sounds')!=='off'}catch{}
+const soundFiles={move:new Audio('data:audio/wav;base64,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OAA5ADwAPgA6ADgANAAuACoAIQAdABYADQAEAP7/9P/t/+H/3v/b/9X/0P/R/9H/1f/Y/+L/5P/k/+v/8//5/wAABgANABAAFwAfACUAKAAsAC8ALgAwAC4AKwAlACAAGwAYABAADgAFAAIAAAD7//T/7//p/+T/3f/c/9n/1v/X/9v/3v/h/+X/6//t//L/+P/+/wIACAANABMAFgAaAB0AHQAfAB8AHgAcAB0AHQAcABkAFwATAA8ADAAHAAIA/v/4//T/8P/r/+f/4//i/+D/3//g/+H/4//l/+n/7f/x//f/+v8AAAIABQAMAA8AEwAVABUAGAAZABoAHAAXABkAFwAWABQAEAANAAoABQADAP///P/3//X/8//v/+z/6//r/+v/6v/r/+v/6//v//L/9P/3//r//f8AAAMABwALAA4AEQASABMAFgAXABcAFgAVABMAEQAQAA4ACwAIAAUAAgAAAP//+//5//b/8//x/+//7//u/+3/7v/u/+7/7//x//L/9P/2//n//P///wEABAAHAAoACwANAA8AEAARABEAEQAQABAADwANAAsACQAHAAQAAgAAAP///f/7//n/+f/3//X/8//y//L/8v/y//P/8//1//b/+f/7//3///8AAAMABQAHAAkACwAMAAwADAANAA0ADQANAAsACgAJAAkACAAFAAMAAQD///7//P/7//n/+P/3//b/9f/1//X/9f/1//b/9//4//n/+v/8//7/AAABAAMABQAGAAgACQAKAAoACgAKAAsACgAKAAkACAAHAAYABQADAAEAAAD///3//P/7//n/+P/3//f/9v/2//b/9//3//f/+P/6//v//P/9//7/AAAAAAIAAwAEAAUABgAHAAcACAAIAAgABwAHAAcABgAFAAUAAwACAAEAAAD///7//f/8//v/+v/5//n/+P/4//j/+P/5//r/+//8//3//v///wAAAAABAAIABAAFAAYABgAHAAgACAAIAAgABwAGAAYABQAEAAMAAgACAAAAAAD///7//f/8//v/+//7//r/+v/6//v/+//7//z//P/9//7//////wAAAAABAAIAAwAEAAQABQAFAAUABgAGAAYABQAFAAUABAADAAIAAQAAAAAAAAD///7//f/9//z//P/8//v/+//7//v//P/8//3//f/+//7///8AAAAAAAABAAIAAgADAAQABAAEAAUABAAEAAQABAADAAMAAgACAAEAAAAAAAAAAAD///7//v/9//3//P/8//z//P/8//z//f/9//3//v//////AAAAAAAAAQABAAIAAgACAAMAAwADAAMAAwADAAMAAwACAAIAAQABAAEAAAAAAAAAAAD//////v/+//7//f/9//3//f/9//3//v/+//7/////////AAAAAAAAAAABAAEAAQACAAIAAgACAAMAAwADAAIAAgACAAIAAQABAAAAAAAAAAAAAAD//////v/+//7//v/+//7//v/+//7//v/+/////////wAAAAAAAAAAAAABAAEAAQACAAIAAgACAAIAAgACAAIAAQABAAEAAQAAAAAAAAAAAAAAAAD///////////7//v/+//7//v/+//////////////8AAAAAAAAAAAAAAAABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAAAAAAAAAAAAAAAAAAAAAP///////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAEAAQABAAEAAQABAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAP////////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAEAAQABAAEAAQABAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='),capture:new Audio('data:audio/wav;base64,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BQAFAAQADgAOABQAEAAKAAsAEQALAAsABAADAPr//f8GAAMA+v8BAP3/8v/u//H/6//g/93/6P/o/+v/7f/z/+7/8f/u/+z/6P/k/+H/4//f/+L/4//q//L/7//z//b//P/7////AAABAAMACgAMABEADwASABAAEgAUABIADAAJAAMAAwAFAAQAAgAAAAAAAgAAAAAA/v/4//n/+P/2//D/7v/v//D/8//0//T/8v/x//T/8//3//f/9//5//j/+f////z/AAD///////8CAAIAAAAAAAMAAAAAAAMAAAD/////AQAFAAQABwAJAAYACgAKAAwABwAHAAUABQADAAQABAAGAAkADAAJAAkABQAGAAQAAQD9//j/9P/z//P/9f/z//T/9v/4//b/+f/4//r/+//7//z//f/9////AAACAAQABQAHAAgABgAKAAwADQAPAA0ADgAPAA0ADQAKAAsACAAHAAgABgAFAAcABwAGAAYABgAEAAEAAQAAAP7//f/7//r/+v/5//n/9//4//r/+P/4//b/9//3//j/+f/3//b/+P/6//v/+//7//v//f//////AAAAAAIAAwAEAAQABQAEAAcABgAGAAUABAAFAAYABQAGAAQABAADAAMABAACAAMAAwACAAEAAAAAAAAA/v/9//3/+//5//n/+f/5//n/+f/4//j/+f/6//z//f/9//3//f/+/////////////v///wAAAQABAAMABAAFAAYABwAHAAcABwAIAAcABgAGAAUABAAEAAQABAADAAMAAwACAAIAAgABAAAA//////7//f/9//3//f/9//7//v/9//3//f/8//z//P/8//v//P/9//3//f/+////AAAAAAAAAAAAAAEAAQACAAMAAgACAAIAAwADAAMABAAEAAQABAAFAAUABQAEAAQAAwACAAIAAgABAAEAAAAAAAAAAAAAAP/////////////+//3//f/8//z//P/8//z//f/9//7//v//////////////AAAAAAAAAAAAAAAAAQABAAEAAQACAAIAAgACAAIAAgADAAMAAwADAAMAAgACAAIAAQABAAIAAQABAAAAAAAAAAAAAAAAAP////////////////////////7//v/+//7//f/9//3//v/+//7/////////AAAAAAAAAAAAAAEAAQABAAEAAQACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAQABAAEAAAAAAAAAAAAAAAAAAAD/////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAQABAAEAAQABAAEAAQABAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=')};
+for(const audio of Object.values(soundFiles)){audio.preload='auto';audio.volume=.55;}
+let audioUnlocked=false;
 function unlockAudio(){
- if(!soundOn)return;
- try{audioCtx??=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{})}catch{}
-}
-// Short filtered noise transients, like a wooden chess piece touching a board.
-// No pitched oscillators, chimes, or musical effects.
-let clickBuffer=null;
-function makeClickBuffer(){
- if(!audioCtx)return null;
- const rate=audioCtx.sampleRate,length=Math.ceil(rate*.13);
- const buffer=audioCtx.createBuffer(1,length,rate),samples=buffer.getChannelData(0);
- let low=0,previous=0;
- for(let i=0;i<length;i++){
-  const t=i/rate;
-  const noise=Math.random()*2-1;
-  low+=(noise-low)*.12;
-  const softened=low*.8+(noise-previous)*.12;
-  previous=noise;
-  const attack=Math.min(1,t/.0015);
-  const decay=Math.exp(-t*65);
-  const rebound=Math.exp(-Math.pow((t-.027)/.007,2))*.22;
-  samples[i]=softened*attack*(decay+rebound);
- }
- return buffer;
-}
-function woodClick(capture=false){
- if(!soundOn||!audioCtx||audioCtx.state!=='running')return;
- try{
-  clickBuffer??=makeClickBuffer();
-  const source=audioCtx.createBufferSource(),filter=audioCtx.createBiquadFilter(),gain=audioCtx.createGain();
-  source.buffer=clickBuffer;
-  source.playbackRate.value=capture?.78:1.08;
-  filter.type='lowpass';filter.frequency.value=capture?1050:1500;
-  gain.gain.value=capture?.36:.26;
-  source.connect(filter);filter.connect(gain);gain.connect(audioCtx.destination);
-  source.start();
- }catch{}
+ if(audioUnlocked||!soundOn)return;
+ // iOS Safari requires a user gesture to unlock media playback.
+ const a=soundFiles.move;
+ const previous=a.volume;a.volume=0;
+ const p=a.play();
+ if(p&&typeof p.then==='function')p.then(()=>{a.pause();a.currentTime=0;a.volume=previous;audioUnlocked=true;}).catch(()=>{a.volume=previous;});
+ else{a.pause();a.currentTime=0;a.volume=previous;audioUnlocked=true;}
 }
 function playSound(type){
- if(type==='move')woodClick(false);
- else if(type==='capture')woodClick(true);
- // Check, win, draw, and loss are silent; the board and result overlay provide feedback.
+ if(!soundOn||!['move','capture'].includes(type))return;
+ const a=soundFiles[type];
+ try{a.pause();a.currentTime=0;a.volume=.55;const p=a.play();if(p&&p.catch)p.catch(()=>{})}catch{}
 }
-function soundForMove(move){playSound(move?.captured?'capture':'move');}
-window.addEventListener('pointerdown',unlockAudio,{passive:true});
+function soundForMove(move){playSound(move?.captured?'capture':'move')}
+window.addEventListener('pointerdown',unlockAudio,{passive:true,capture:true});
+window.addEventListener('touchstart',unlockAudio,{passive:true,capture:true});
 function doMove(m){if(!engineReady||!verified)return;solution=null;const before=game.fen();let moved;let piece=game.get(m.from);try{moved=game.move(m)}catch{return}history.push(before);selected=null;render();animateMove(moved,piece);soundForMove(moved);if(checkEnd())return;busy=true;status.textContent='Computer thinking…';computerReply()}
 function hideResult(){$('result-overlay').hidden=true}
 function showResult(kind,title,detail){
@@ -374,12 +389,14 @@ async function verifyDrill(gen){
 }
 
 if('serviceWorker' in navigator && location.protocol==='https:'){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});}
+$('quick-sound').textContent=soundOn?'♫':'♪̸';
 $('sound-toggle').textContent=soundOn?'On ♪':'Off';
 $('sound-toggle').setAttribute('aria-pressed',String(soundOn));
-$('sound-toggle').onclick=()=>{soundOn=!soundOn;$('sound-toggle').textContent=soundOn?'On ♪':'Off';$('sound-toggle').setAttribute('aria-pressed',String(soundOn));try{localStorage.setItem('endgame-lab-sounds',soundOn?'on':'off')}catch{}if(soundOn){unlockAudio();playSound('move')}};
+$('sound-toggle').onclick=()=>{soundOn=!soundOn;if(soundOn)unlockAudio();$('quick-sound').textContent=soundOn?'♫':'♪̸';$('sound-toggle').textContent=soundOn?'On ♪':'Off';$('sound-toggle').setAttribute('aria-pressed',String(soundOn));try{localStorage.setItem('endgame-lab-sounds',soundOn?'on':'off')}catch{}if(soundOn){unlockAudio();playSound('move')}};
 $('result-close').onclick=hideResult;
 $('result-again').onclick=reset;
 $('result-next').onclick=()=>{$('next').click();hideResult()};
+$('quick-sound').onclick=()=>{$('sound-toggle').click()};
 $('settings-toggle').onclick=()=>{
  const panel=$('settings-content'),opening=panel.hidden;panel.hidden=!opening;
  $('settings-toggle').setAttribute('aria-expanded',String(opening));
