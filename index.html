@@ -158,7 +158,7 @@ body.training-active header,body.training-active main{animation:slideIn .28s cub
 <div class="settings-top"><span class="eyebrow">TRAINING OPTIONS</span><button type="button" id="settings-toggle" class="linkbutton" aria-expanded="false">Customize <span id="toggle-arrow">⌄</span></button></div>
 <div id="settings-content" hidden><div class="sound-setting"><span>Move sounds</span><button type="button" id="sound-toggle" class="secondary" aria-pressed="true">On ♪</button></div>
 <div class="fieldgrid"><div><label class="label" for="category">ENDGAME TYPE</label><select id="category"></select></div><div><label class="label" for="strength">OPPONENT</label><select id="strength"><option value="4">Beginner · 4</option><option value="9">Intermediate · 9</option><option value="15">Advanced · 15</option><option value="20" selected>Maximum · 20</option></select></div></div>
-<label class="label" for="outcome-filter">TRAINING GOAL</label><select id="outcome-filter"><option value="win" selected>Winning positions</option><option value="draw">Drawing positions</option><option value="browse">All positions</option></select>
+<label class="label" for="outcome-filter">TRAINING GOAL</label><select id="outcome-filter"><option value="win">Winning positions</option><option value="draw">Drawing positions</option><option value="browse" selected>All positions (including unchecked)</option></select>
 <label class="label" for="drill">SELECT EXERCISE</label><select id="drill"></select>
 <div class="muted" id="description"></div>
 </div>
@@ -207,9 +207,9 @@ function updateDrills(){
  const filter=$('outcome-filter').value;
  const available=drills.map((d,i)=>({...d,i})).filter(x=>(category.value==='all'||x[0]===category.value)&&!invalidStartingPosition(x[2])&&(filter==='browse'||knownOutcome(x[2])===filter));
  if(!available.length){
-  drill.innerHTML='<option value="">No verified positions saved in this category yet</option>';drill.disabled=true;
-  verified=false;verifiedGoal=null;game=null;board.innerHTML='';$('drill-title').textContent='Finding verified positions…';
-  $('goal').textContent='Checking';$('verification').textContent='Automatic verification is running. Verified results will appear here as they are saved.';status.textContent='No verified positions in this category yet. Try another category or wait for scanning.';return;
+  drill.innerHTML='<option value="">No eligible positions in this category</option>';drill.disabled=true;
+  verified=false;verifiedGoal=null;game=null;board.innerHTML='';$('drill-title').textContent='No matching positions';
+  $('goal').textContent='Checking';$('verification').textContent='Choose All positions to view candidates while verification runs.';status.textContent='No matching positions. Select All positions or another category.';return;
  }
  drill.disabled=false;drill.innerHTML=available.map(x=>`<option value="${x.i}">${completed.has(x.i)?'✓ ':''}${x[1]}${knownOutcome(x[2])?' · '+knownOutcome(x[2]).toUpperCase():''}</option>`).join('');
  current=available[0].i;drill.value=String(current);reset();
