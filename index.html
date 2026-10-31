@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152333"><title>Endgame Lab</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Endgame Lab"><style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#eef3f7;background:#101923}*{box-sizing:border-box}body{margin:0}header{padding:18px 18px 12px;background:#152333;display:flex;justify-content:space-between;align-items:center}h1{font-size:22px;margin:0}small,.muted{color:#9eb0bd}main{max-width:570px;margin:auto;padding:16px}.panel{background:#1b2b3a;border:1px solid #34495a;border-radius:16px;padding:15px;margin-bottom:14px}select,button{font:inherit}select{width:100%;background:#101923;color:white;border:1px solid #536879;border-radius:10px;padding:12px;margin:8px 0}button{background:#2e8b73;color:white;border:0;border-radius:10px;padding:11px 15px;font-weight:600;cursor:pointer}button.secondary{background:#354a5c}button:disabled{opacity:.4}nav{display:flex;gap:8px;flex-wrap:wrap}.board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;border:3px solid #415464;border-radius:5px;overflow:hidden}.sq{position:relative;display:flex;justify-content:center;align-items:center;padding:0;border-radius:0;background:#eedfc3;color:#171717;aspect-ratio:1;font-family:'Arial Unicode MS','DejaVu Sans',serif;font-size:clamp(25px,9vw,53px);font-weight:normal;line-height:1;touch-action:manipulation}.sq.dark{background:#8ca7a0}.sq.selected{background:#e4c55b}.sq.target:after{content:'';position:absolute;width:25%;height:25%;background:#1b675b88;border-radius:50%;pointer-events:none}.sq.black{color:#151515;text-shadow:0 1px 1px #eee}.sq.white{color:#fffdf5;text-shadow:0 2px 2px #222,-1px -1px #333,1px 0 #333}.pill{display:inline-block;background:#30475a;padding:5px 10px;border-radius:99px;font-size:12px}.stats{display:flex;justify-content:space-between;gap:8px;margin:12px 0}.label{font-size:12px;color:#adc1cf}.value{font-size:20px;font-weight:700}.footer{font-size:12px;color:#8da1b1;line-height:1.5}.promotion{display:none;gap:8px;margin:10px 0}.promotion.show{display:flex}.promotion button{flex:1}.notice{min-height:45px;line-height:1.4}#setup{display:none;background:#552d2d;padding:12px;border-radius:10px;margin-bottom:10px} @media(min-width:600px){.sq{font-size:54px}}
+</style></head><body><header><div><h1>♙ Endgame Lab</h1><small>Free chess endgame training</small></div><span class="pill" id="engine-badge">Stockfish loading</span></header><main><div id="setup">Loading the chess rules library. An internet connection is required the first time you open this app.</div><section class="panel"><label class="label" for="category">CATEGORY</label><select id="category"></select><label class="label" for="strength">STOCKFISH DIFFICULTY</label><select id="strength"><option value="4">Beginner · Level 4</option><option value="9" selected>Intermediate · Level 9</option><option value="15">Advanced · Level 15</option><option value="20">Maximum · Level 20</option></select><label class="label" for="drill">DRILL</label><select id="drill"></select><div id="description" class="muted" style="font-size:14px;margin:8px 0"></div></section><div class="stats"><div><div class="label">YOUR GOAL</div><div class="value" id="goal">Win</div></div><div style="text-align:right"><div class="label">DRILLS COMPLETED</div><div class="value" id="progress">0</div></div></div><div class="board" id="board" aria-label="Chessboard"></div><div class="promotion" id="promotion"></div><section class="panel" style="margin-top:14px"><div class="notice" id="status">Choose a piece to move.</div><nav><button id="restart">↻ Retry</button><button id="undo" class="secondary">↶ Undo</button><button id="hint" class="secondary">Hint</button><button id="next" class="secondary">Next drill →</button></nav></section><p class="footer">All drills use original positions or standard public-domain chess techniques. Legal moves, castling, promotion and draws are handled by chess.js. Stockfish 17.1 Lite runs in a browser worker when loaded successfully. Engine files are downloaded from a public CDN and require an internet connection. The app will tell you if the engine cannot load. Your progress is saved on this device when browser storage is available.</p></main><script type="module">
+import {Chess} from 'https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm';
+const drills=[
+['Pawn endings','Opposition','8/8/4k3/8/4P3/4K3/8/8 w - - 0 1','Win','Use your king to escort the pawn.'],
+['Pawn endings','Protected passer','8/8/4k3/3p4/3P1P2/4K3/8/8 w - - 0 1','Win','Use the protected passed pawn.'],
+['Pawn endings','Outside passer','8/8/5k2/p7/P4P2/5K2/8/8 w - - 0 1','Win','Create a diversion on the wing.'],
+['Pawn endings','Pawn race','8/8/1k6/8/4P3/8/4K3/8 w - - 0 1','Win','Calculate the square of the pawn.'],
+['Basic mates','Queen mate','7k/8/8/8/8/4K3/8/3Q4 w - - 0 1','Mate','Push the king toward the edge.'],
+['Basic mates','Rook mate','7k/8/8/8/8/4K3/8/3R4 w - - 0 1','Mate','Use the rook and king together.'],
+['Basic mates','Two-rook ladder','7k/8/8/8/8/8/4K3/R6R w - - 0 1','Mate','Cut off ranks with alternating rooks.'],
+['Basic mates','Two bishops','7k/8/8/8/8/4K3/8/2BB4 w - - 0 1','Mate','Coordinate the bishops with your king.'],
+['Rook endings','Extra rook pawn','8/8/5k2/8/7P/5K2/8/R7 w - - 0 1','Win','Keep your rook active and support the pawn.'],
+['Rook endings','Active rook','8/8/5k2/6p1/6P1/5K2/8/R7 w - - 0 1','Win','Activate your rook behind the pawn.'],
+['Minor pieces','Bishop and pawn','8/8/5k2/8/3P4/4KB2/8/8 w - - 0 1','Win','Use your bishop to control key squares.'],
+['Minor pieces','Knight and pawn','8/8/5k2/8/3P4/4KN2/8/8 w - - 0 1','Win','Coordinate knight and king.'],
+['Queen endings','Queen vs pawn','8/8/4k3/8/3p4/8/4K3/3Q4 w - - 0 1','Win','Prevent the pawn from promoting.'],
+['Queen endings','Queen and extra pawn','8/8/5k2/8/4P3/4K3/8/3Q4 w - - 0 1','Win','Convert without stalemating.']
+];
+let game,selected=null,history=[],busy=false,current=0,completed=new Set(),generation=0;try{completed=new Set(JSON.parse(localStorage.getItem('endgame-lab-completed')||'[]'))}catch{}
+const $=id=>document.getElementById(id),category=$('category'),drill=$('drill'),board=$('board'),status=$('status');
+const glyph={wk:'♔',wq:'♕',wr:'♖',wb:'♗',wn:'♘',wp:'♙',bk:'♚',bq:'♛',br:'♜',bb:'♝',bn:'♞',bp:'♟︎'};
+const cats=[...new Set(drills.map(x=>x[0]))];category.innerHTML=cats.map(x=>`<option>${x}</option>`).join('');
+function updateDrills(){const available=drills.map((d,i)=>({...d,i})).filter(x=>x[0]===category.value);drill.innerHTML=available.map(x=>`<option value="${x.i}">${completed.has(x.i)?'✓ ':''}${x[1]}</option>`).join('');current=available[0].i;drill.value=String(current);reset()}
+function reset(){generation++;if(engineReady)engineMessage("stop");game=new Chess(drills[current][2]);selected=null;history=[];busy=false;$('description').textContent=drills[current][4];$('goal').textContent=drills[current][3];status.textContent='White to move. '+drills[current][4];$('promotion').classList.remove('show');render()}
+function render(){board.innerHTML='';const targets=selected?game.moves({square:selected,verbose:true}).map(m=>m.to):[];for(let r=7;r>=0;r--)for(let f=0;f<8;f++){const sq='abcdefgh'[f]+(r+1),p=game.get(sq),b=document.createElement('button');b.className='sq '+((f+r)%2===0?'dark ':'')+(p?' '+(p.color==='w'?'white':'black'):'')+(selected===sq?' selected':'')+(targets.includes(sq)?' target':'');b.textContent=p?glyph[p.color+p.type]:'';b.setAttribute('aria-label',sq+(p?' '+p.color+p.type:''));b.onclick=()=>tap(sq);board.appendChild(b)}$('progress').textContent=completed.size;$('undo').disabled=!history.length||busy}
+function tap(sq){if(busy||!engineReady||game.isGameOver()||game.turn()!=='w')return;const p=game.get(sq);if(selected){const moves=game.moves({square:selected,verbose:true}).filter(m=>m.to===sq);if(moves.length){if(moves.some(m=>m.flags.includes('p'))){const promotion=$('promotion');promotion.innerHTML='';for(const piece of ['q','r','b','n']){const btn=document.createElement('button');btn.textContent=glyph['w'+piece];btn.onclick=()=>{promotion.classList.remove('show');doMove({from:selected,to:sq,promotion:piece})};promotion.appendChild(btn)}promotion.classList.add('show')}else doMove({from:selected,to:sq});return}}selected=p?.color==='w'?sq:null;render()}
+function doMove(m){if(!engineReady)return;const before=game.fen();try{game.move(m)}catch{return}history.push(before);selected=null;render();if(checkEnd())return;busy=true;status.textContent='Computer thinking…';computerReply()}
+function checkEnd(){if(game.isCheckmate()){const win=game.turn()==='b';status.textContent=win?'Checkmate! Drill completed.':'Checkmate — computer wins.';if(win)complete();return true}if(game.isDraw()){status.textContent='Draw — '+(game.isStalemate()?'stalemate.':'game drawn.');return true}return false}
+function complete(){completed.add(current);try{localStorage.setItem('endgame-lab-completed',JSON.stringify([...completed]))}catch{}render()}
+// Stockfish UCI worker. A Blob bootstrap permits loading the CDN-hosted worker
+// from a local HTML page. Engine loading failures are surfaced, not disguised.
+const engineUrl='https://cdn.jsdelivr.net/npm/stockfish@17.1.0/bin/stockfish-17.1-lite-single.js';
+const wasmUrl='https://cdn.jsdelivr.net/npm/stockfish@17.1.0/bin/stockfish-17.1-lite-single.wasm';
+let engine=null,engineReady=false,engineFailed=false,engineWait=null,engineTimer=null;
+function engineMessage(msg){if(engine)engine.postMessage(msg)}
+function failEngine(message){
+  engineReady=false;engineFailed=true;busy=false;
+  clearTimeout(engineTimer);
+  if(engineWait){engineWait(null);engineWait=null}
+  $('engine-badge').textContent='Engine unavailable';
+  status.textContent=message+' To use Stockfish, open this app on a hosted HTTPS website with access to its engine files.';
+  render();
+}
+async function initEngine(){
+ try{
+  $('engine-badge').textContent='Stockfish loading';
+  // Worker is hosted on the same origin as the app; CDN engine assets are fetched by the worker.
+  engine=new Worker('./engine-worker.js');
+  engine.onerror=()=>failEngine('Stockfish worker failed to load.');
+  engine.onmessage=e=>{
+   const raw=typeof e.data==='string'?e.data:String(e.data);
+   for(const msg of raw.split(/\r?\n/)){
+    if(msg==='engine-error'){failEngine('Stockfish assets could not load. Check your internet connection.');continue}
+    if(msg.includes('uciok'))engineMessage('isready');
+    if(msg.includes('readyok')){
+     engineReady=true;engineFailed=false;
+     $('engine-badge').textContent='Stockfish ready';
+     status.textContent='Stockfish is ready. White to move.';
+    }
+    if(msg.startsWith('bestmove ')&&engineWait){
+     const move=msg.split(/\s+/)[1],done=engineWait;
+     engineWait=null;clearTimeout(engineTimer);done(move==='(none)'?null:move);
+    }
+   }
+  };
+  engineMessage('uci');
+  setTimeout(()=>{if(!engineReady&&!engineFailed)failEngine('Stockfish did not finish initializing.')},25000);
+ }catch(e){failEngine('Could not start Stockfish: '+e.message)}
+}
+function stockfishMove(){
+ return new Promise(resolve=>{
+  if(!engineReady||engineFailed){resolve(null);return}
+  engineWait=resolve;
+  engineMessage('stop');
+  engineMessage('setoption name Skill Level value '+$('strength').value);
+  engineMessage('position fen '+game.fen());
+  engineMessage('go movetime '+($('strength').value==='20'?1400:650));
+  engineTimer=setTimeout(()=>failEngine('Stockfish stopped responding.'),12000);
+ });
+}
+function uciToMove(uci){if(!uci||uci.length<4)return null;return {from:uci.slice(0,2),to:uci.slice(2,4),promotion:uci[4]||'q'}}
+async function computerReply(){
+ const gen=generation;const uci=await stockfishMove();
+ if(gen!==generation)return;
+ if(!uci){busy=false;if(!engineFailed)status.textContent='Stockfish could not provide a move.';render();return}
+ try{game.move(uciToMove(uci))}catch{failEngine('Stockfish returned an invalid move.');return}
+ busy=false;render();
+ if(!checkEnd())status.textContent='Your move. '+(game.isCheck()?'You are in check.':'');
+}
+if('serviceWorker' in navigator && location.protocol==='https:'){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+$('restart').onclick=reset;$('undo').onclick=()=>{if(!history.length||busy)return;game.load(history.pop());selected=null;status.textContent='Move undone. White to move.';render()};$('hint').onclick=()=>{if(busy||game.turn()!=='w'||game.isGameOver())return;status.textContent='Hint: activate your king, calculate pawn races, and look for forcing checks. Engine hints are not yet implemented.'};$('next').onclick=()=>{const next=(current+1)%drills.length;category.value=drills[next][0];updateDrills();current=next;drill.value=String(current);reset()};category.onchange=updateDrills;drill.onchange=()=>{current=Number(drill.value);reset()};updateDrills();initEngine();
+</script></body></html>
