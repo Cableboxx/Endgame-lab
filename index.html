@@ -166,7 +166,7 @@ body.training-active header,body.training-active main{animation:slideIn .28s cub
 <div class="promotion" id="promotion"></div>
 <div class="belowboard"><span id="verification" class="muted">Checking Syzygy…</span><span id="progress-label">0 completed</span></div>
 <div class="notice" id="status" aria-live="polite">Preparing your endgame…</div>
-<nav class="actions"><button id="solution" class="secondary">✦ Best move</button><button id="undo" class="secondary">↶ Undo</button><button id="restart" class="secondary">↻ Restart</button><button id="next">Next win →</button></nav>
+<nav class="actions"><button id="solution" class="secondary">✦ Best move</button><button id="undo" class="secondary">↶ Undo</button><button id="restart" class="secondary">↻ Restart</button><button id="next">Next lesson →</button></nav>
 </section>
 <button id="browse-lessons" type="button">☷ Browse exercises</button>
 <section class="settings-card">
@@ -263,7 +263,7 @@ async function scanAll(onlyFailed=false){
  }
  scanRunning=false;updateScanProgress();
 }
-function reset(){hideResult();generation++;$('drill-title').textContent=drills[current][1];if(engineReady)engineMessage("stop");game=new Chess(drills[current][2]);selected=null;history=[];busy=false;solution=null;$('description').textContent=drills[current][4];$('goal').textContent=drills[current][3];status.textContent='Checking the position with the Syzygy tablebase…';verified=false;verifiedGoal=null;tablebaseResult=null;$('goal').textContent='Checking…';$('verification').textContent='Checking exact result…';$('promotion').classList.remove('show');render();verifyDrill(generation)}
+function reset(){hideResult();generation++;playerSide=drills[current][2].split(' ')[1];$('drill-title').textContent=drills[current][1];if(engineReady)engineMessage("stop");game=new Chess(drills[current][2]);selected=null;history=[];busy=false;solution=null;$('description').textContent=drills[current][4];$('goal').textContent=drills[current][3];status.textContent='Position ready. You can play while verification runs.';verified=true;verifiedGoal=null;tablebaseResult=null;$('goal').textContent='Checking…';$('verification').textContent='Checking exact result…';$('promotion').classList.remove('show');render();verifyDrill(generation)}
 function render(){if(!game)return;board.innerHTML='';const targets=selected?game.moves({square:selected,verbose:true}).map(m=>m.to):[];for(let r=7;r>=0;r--)for(let f=0;f<8;f++){const sq='abcdefgh'[f]+(r+1),p=game.get(sq),b=document.createElement('button');b.className='sq '+((f+r)%2===0?'dark ':'')+(p?' '+(p.color==='w'?'white':'black'):'')+(selected===sq?' selected':'')+(targets.includes(sq)?' target':'')+(solution?.from===sq?' solution-from':'')+(solution?.to===sq?' solution-to':'');b.innerHTML=p?pieceSvg(p):'';b.dataset.square=sq;b.setAttribute('aria-label',sq+(p?' '+p.color+p.type:''));b.onclick=()=>tap(sq);board.appendChild(b)}$('progress').textContent=completed.size;$('progress-label').textContent=completed.size+' completed';$('undo').disabled=!history.length||busy}
 function moveSnapshot(from){
  const el=board.querySelector('[data-square="'+from+'"]');
@@ -281,7 +281,7 @@ function animateMove(move,snapshot){
  requestAnimationFrame(()=>requestAnimationFrame(()=>{ghost.style.transform=`translate(${b.left-r.left-snapshot.left}px,${b.top-r.top-snapshot.top}px)`}));
  setTimeout(()=>{ghost.remove();to.classList.remove('moving-destination')},255);
 }
-function tap(sq){if(!verified||busy||!engineReady||game.isGameOver()||game.turn()!=='w')return;const p=game.get(sq);if(selected){const moves=game.moves({square:selected,verbose:true}).filter(m=>m.to===sq);if(moves.length){if(moves.some(m=>m.flags.includes('p'))){const promotion=$('promotion');promotion.innerHTML='';for(const piece of ['q','r','b','n']){const btn=document.createElement('button');btn.textContent=glyph['w'+piece];btn.onclick=()=>{promotion.classList.remove('show');doMove({from:selected,to:sq,promotion:piece})};promotion.appendChild(btn)}promotion.classList.add('show')}else doMove({from:selected,to:sq});return}}selected=p?.color==='w'?sq:null;render()}
+function tap(sq){if(busy||!engineReady||game.isGameOver()||game.turn()!==playerSide)return;const p=game.get(sq);if(selected){const moves=game.moves({square:selected,verbose:true}).filter(m=>m.to===sq);if(moves.length){if(moves.some(m=>m.flags.includes('p'))){const promotion=$('promotion');promotion.innerHTML='';for(const piece of ['q','r','b','n']){const btn=document.createElement('button');btn.textContent=glyph['w'+piece];btn.onclick=()=>{promotion.classList.remove('show');doMove({from:selected,to:sq,promotion:piece})};promotion.appendChild(btn)}promotion.classList.add('show')}else doMove({from:selected,to:sq});return}}selected=p?.color===playerSide?sq:null;render()}
 // Original, subtle Web Audio effects. No downloads or external audio files.
 // Short embedded WAV samples: no synthesizer oscillators or external audio downloads.
 let soundOn=true;
@@ -306,7 +306,7 @@ function playSound(type){
 function soundForMove(move){playSound(move?.captured?'capture':'move')}
 window.addEventListener('pointerdown',unlockAudio,{passive:true,capture:true});
 window.addEventListener('touchstart',unlockAudio,{passive:true,capture:true});
-function doMove(m){if(!engineReady||!verified)return;solution=null;const before=game.fen();let moved;let snapshot=moveSnapshot(m.from);try{moved=game.move(m)}catch{return}history.push(before);selected=null;render();animateMove(moved,snapshot);soundForMove(moved);if(checkEnd())return;busy=true;status.textContent='Computer thinking…';computerReply()}
+function doMove(m){if(!engineReady)return;solution=null;const before=game.fen();let moved;let snapshot=moveSnapshot(m.from);try{moved=game.move(m)}catch{return}history.push(before);selected=null;render();animateMove(moved,snapshot);soundForMove(moved);if(checkEnd())return;busy=true;status.textContent='Computer thinking…';computerReply()}
 function hideResult(){$('result-overlay').hidden=true}
 function showResult(kind,title,detail){
  playSound(kind==='win'?'win':kind==='loss'?'loss':'draw');
@@ -318,7 +318,7 @@ function showResult(kind,title,detail){
 }
 function checkEnd(){
  if(game.isCheckmate()){
-  const win=game.turn()==='b';
+  const win=game.turn()!==playerSide;
   status.textContent=win?'Checkmate! Drill completed.':'Checkmate — computer wins.';
   if(win&&verifiedGoal==='Win')complete();
   showResult(win?'win':'loss',win?'Checkmate!':'Defeat',win?'You delivered checkmate. Well played.':'Stockfish delivered checkmate.');
@@ -360,7 +360,7 @@ async function initEngine(){
     if(msg.includes('readyok')){
      engineReady=true;engineFailed=false;
      $('engine-badge').textContent='Stockfish ready';
-     status.textContent='Stockfish is ready. White to move.';
+     status.textContent='Stockfish is ready. '+(playerSide==='w'?'White':'Black')+' to move.';
     }
     if(msg.startsWith('bestmove ')&&engineWait){
      const move=msg.split(/\s+/)[1],done=engineWait;
@@ -393,7 +393,7 @@ async function computerReply(){
  if(!checkEnd())status.textContent='Your move. '+(game.isCheck()?'You are in check.':'');
 }
 async function showBestMove(){
- if(!verified||busy||!engineReady||game.turn()!=='w'||game.isGameOver())return;
+ if(busy||!engineReady||game.turn()!==playerSide||game.isGameOver())return;
  busy=true;solution=null;selected=null;
  const gen=generation,fen=game.fen();
  status.textContent='Stockfish is finding the best move…';render();
@@ -439,15 +439,15 @@ async function verifyDrill(gen){
    tablebaseResult=data;
    $('goal').textContent=verifiedGoal;
    $('verification').textContent='✓ Syzygy verified: '+outcome.toUpperCase()+' for side to move.';
-   status.textContent=verifiedGoal==='Win'?'Verified win. White to move.':verifiedGoal==='Hold draw'?'Verified draw. Hold the draw against Stockfish.':'Verified loss. This is a defensive challenge, not a winning drill.';
+   status.textContent=verifiedGoal==='Win'?'Verified win. '+(playerSide==='w'?'White':'Black')+' to move.':verifiedGoal==='Hold draw'?'Verified draw. Hold the draw against Stockfish.':'Verified loss. This is a defensive challenge, not a winning drill.';
   }else{
    $('goal').textContent='Unverified';$('verification').textContent='Not playable: tablebase result '+outcome+'.';
-   status.textContent='This position cannot be certified as a normal win or draw. Select another drill.';
+   status.textContent='Unusual tablebase classification. You can still explore this position.';
   }
  }catch(e){
   if(gen!==generation)return;
   $('goal').textContent='Unverified';$('verification').textContent='Tablebase request failed after 3 attempts: '+(e?.message||'Unknown error')+'.';
-  status.textContent='Could not verify this drill. It is locked rather than falsely labeled a win. Tap Retry to check again.';
+  status.textContent='Tablebase unavailable. You can still play; the result is not verified.';
  }
  render();
 }
@@ -466,7 +466,7 @@ $('settings-toggle').onclick=()=>{
  $('settings-toggle').setAttribute('aria-expanded',String(opening));
  $('settings-toggle').innerHTML=opening?'Done ↑':'Customize ⌄';
 };
-$('scan-retry').onclick=()=>scanAll(true);$('restart').onclick=reset;$('undo').onclick=()=>{if(!history.length||busy)return;game.load(history.pop());selected=null;solution=null;status.textContent='Move undone. White to move.';render()};$('hint').onclick=()=>{if(!verified||busy||game.turn()!=='w'||game.isGameOver())return;status.textContent='Hint: activate your king, calculate pawn races, and look for forcing checks. Tap Best move to see Stockfish recommended move.'};$('solution').onclick=showBestMove;$('next').onclick=()=>{const options=[...drill.options].filter(o=>o.value);if(!options.length)return;const at=options.findIndex(o=>Number(o.value)===current);const next=Number(options[(at+1)%options.length].value);current=next;try{localStorage.setItem('endgame-lab-last-drill',String(current))}catch{}drill.value=String(current);reset()};category.onchange=updateDrills;$('outcome-filter').onchange=()=>{$('next').textContent=$('outcome-filter').value==='win'?'Next win →':'Next drill →';updateDrills()};drill.onchange=()=>{current=Number(drill.value);try{localStorage.setItem('endgame-lab-last-drill',String(current))}catch{}reset()};async function boot(){
+$('scan-retry').onclick=()=>scanAll(true);$('restart').onclick=reset;$('undo').onclick=()=>{if(!history.length||busy)return;game.load(history.pop());selected=null;solution=null;status.textContent='Move undone.';render()};$('hint').onclick=()=>{if(busy||game.turn()!==playerSide||game.isGameOver())return;status.textContent='Hint: activate your king, calculate pawn races, and look for forcing checks. Tap Best move to see Stockfish recommended move.'};$('solution').onclick=showBestMove;$('next').onclick=()=>{if(guidedTraining){const order=guidedChapters.flatMap(ch=>ch.lessons).filter(i=>drills[i]);const at=order.indexOf(current);const next=order[(at+1)%order.length];if(next!==undefined){showGuidedDetail(next)}return}const options=[...drill.options].filter(o=>o.value);if(!options.length)return;const at=options.findIndex(o=>Number(o.value)===current);const next=Number(options[(at+1)%options.length].value);current=next;try{localStorage.setItem('endgame-lab-last-drill',String(current))}catch{}drill.value=String(current);reset()};category.onchange=updateDrills;$('outcome-filter').onchange=()=>{$('next').textContent=guidedTraining?'Next lesson →':'Next exercise →';updateDrills()};drill.onchange=()=>{guidedTraining=false;current=Number(drill.value);try{localStorage.setItem('endgame-lab-last-drill',String(current))}catch{}reset()};async function boot(){
  const sources=['https://esm.sh/chess.js@1.4.0','https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm','https://unpkg.com/chess.js@1.4.0/dist/esm/chess.js'];
  for(const url of sources){try{const module=await import(url);if(typeof module.Chess==='function'){Chess=module.Chess;break}}catch(e){console.warn('Chess library unavailable at',url,e)}}
  if(!Chess){$('setup').style.display='block';$('setup').textContent='Could not load chess rules. Check internet and refresh this page.';return}
@@ -520,13 +520,13 @@ const lessonNotes={
  27:['A black pawn on b2 is one step from promotion; White has rook and knight against bishop.','Urgency matters: calculate promotion threats before considering slower material gains.','What forcing resource stops the b-pawn?'],
  28:['Both sides have advanced pawns and opposite-colored bishops.','Promotion races are about tempi, control of promotion squares and bishop diagonals.','Which pawn push creates a threat Black cannot ignore?']
 };
-let activeGuided=null;
+let activeGuided=null;let guidedTraining=false;let playerSide='w';
 function drawGuidedDiagram(fen){
  const el=document.getElementById('guided-diagram');el.replaceChildren();
  const rows=fen.split(' ')[0].split('/');
  rows.forEach((row,r)=>{let c=0;for(const ch of row){if(/^[1-8]$/.test(ch)){for(let j=0;j<Number(ch);j++)add(null)}else add(ch)}function add(piece){const sq=document.createElement('span');sq.className='guided-square '+((r+c)%2?'dark':'light');if(piece){sq.innerHTML=pieceSvg({type:piece.toLowerCase(),color:piece===piece.toUpperCase()?'w':'b'});}el.append(sq);c++}});
 }
-function showGuidedDetail(index){
+function showGuidedDetail(index){guidedTraining=true;
  activeGuided=index;const d=drills[index],notes=lessonNotes[index]||[d[4],'Assess king activity, passed pawns and the opponent’s immediate threats.','Which move most improves your position while meeting the opponent’s threat?'];
  document.getElementById('guided-title').textContent=d[1];
  document.getElementById('guided-source').textContent=d[0].includes('Lichess')?'SOURCE · LICHESS STUDY':'SOURCE · PUBLISHED ENDGAME STUDY';
@@ -547,7 +547,7 @@ function showPath(){
  const a=document.createElement('a');a.href='https://www.gutenberg.org/ebooks/33870';a.target='_blank';a.rel='noopener';a.textContent='Read Capablanca ↗';resource.append(a);list.append(resource);reveal(pathScreen);
 }
 document.getElementById('guided-detail-back').addEventListener('click',showPath);
-document.getElementById('guided-train').addEventListener('click',()=>{if(activeGuided===null)return;const i=activeGuided;current=i;category.value='all';$('outcome-filter').value='browse';updateDrills();drill.value=String(i);localStorage.setItem('endgame-lab-last-drill',String(i));reset();reveal(null)});
+document.getElementById('guided-train').addEventListener('click',()=>{if(activeGuided===null)return;const i=activeGuided;guidedTraining=true;current=i;category.value='all';$('outcome-filter').value='browse';updateDrills();drill.value=String(i);localStorage.setItem('endgame-lab-last-drill',String(i));reset();$('next').textContent='Next lesson →';reveal(null)});
 let libraryCategory='all';
 function categoryOf(d){const n=d[0].toLowerCase(),title=d[1].toLowerCase();if(n.includes('rook')||title.includes('rook'))return 'Rook endings';if(n.includes('pawn')||title.includes('pawn')||title.includes('réti')||title.includes('saavedra'))return 'Pawn endings';if(n.includes('mate'))return 'Checkmates';return 'Other studies'}
 function showLibrary(cat='all'){
