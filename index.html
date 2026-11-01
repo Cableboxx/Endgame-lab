@@ -134,6 +134,17 @@ body.training-active header,body.training-active main{animation:slideIn .28s cub
 .path-info{flex:1}.path-info strong{display:block;font-size:14px;margin-bottom:5px}.path-info small{display:block;color:#9cb6b9;font-size:12px;line-height:1.35}.path-done{color:#b9e5bd;font-size:19px}
 .path-tag{font-size:10px;letter-spacing:1.3px;color:#9db8b9;font-weight:750;margin-bottom:12px}
 @media(prefers-reduced-motion:reduce){#home-screen,#path-screen,body header,body main{transition:none!important;animation:none!important}}
+
+/* Library-first navigation: choosing a category never launches an exercise. */
+#library-screen{position:fixed;inset:0;z-index:96;overflow-y:auto;background:#0e1921;color:#eaf1f0;padding:calc(env(safe-area-inset-top) + 20px) max(18px,calc((100vw - 540px)/2)) calc(env(safe-area-inset-bottom) + 35px)}
+#library-screen[hidden]{display:none}body.library-active{overflow:hidden}body.library-active header,body.library-active main{visibility:hidden}
+.library-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:24px}.library-back{background:transparent;color:#d2e4df;border:0;padding:10px 0;font-weight:700}
+.library-title{font-size:28px;margin:0 0 8px;letter-spacing:-.7px}.library-intro{color:#9bb6b8;font-size:13px;line-height:1.5;margin:0 0 19px}
+.library-tabs{display:flex;gap:7px;overflow-x:auto;padding:0 0 14px;scrollbar-width:none}.library-tabs button{flex-shrink:0;background:#20343b;border:1px solid #345058;border-radius:30px;padding:9px 13px;color:#b9d1d1;font-size:12px}.library-tabs button.active{background:#cfe6d6;color:#18352e;border-color:#cfe6d6;font-weight:750}
+.library-list{display:grid;gap:10px}.library-item{width:100%;text-align:left;background:#192c34;border:1px solid #304950;border-radius:16px;padding:16px;color:#eaf2ee;display:flex;align-items:center;gap:12px;min-height:88px}.library-item:active{background:#27413f}.library-item strong{display:block;font-size:14px;line-height:1.4}.library-item small{display:block;font-size:11px;color:#9bb5b9;margin-top:6px}.library-item .library-arrow{margin-left:auto;color:#a8c7be;font-size:22px}.library-item .library-check{color:#98d9b1;margin-right:4px}.library-empty{color:#9bb6b8;padding:20px 0;font-size:14px}
+#browse-lessons{width:100%;margin:12px 0 0;padding:13px;border-radius:12px;background:#203c3a;border:1px solid #3e6258;color:#dcefe6;font-weight:750}
+.board{position:relative;overflow:hidden}.piece-ghost{position:absolute;z-index:12;pointer-events:none;transition:transform 230ms cubic-bezier(.18,.72,.24,1);will-change:transform;display:grid;place-items:center}.sq.moving-destination>.piece-svg{visibility:hidden}
+@media(prefers-reduced-motion:reduce){.piece-ghost{transition:none!important}}
 </style></head><body class="home-active"><section id="home-screen" aria-label="Endgame Lab home">
 <div class="home-brand"><div class="home-logo">♔</div><div><strong>Endgame Lab</strong><small>MASTER THE ENDGAME</small></div></div>
 <div class="home-eyebrow">YOUR NEXT SESSION</div>
@@ -143,7 +154,7 @@ body.training-active header,body.training-active main{animation:slideIn .28s cub
 <button class="home-category" data-home-category="Pawn endings"><span class="cat-icon">♙</span><span><strong>Pawn endings</strong><small>Opposition & promotion</small></span></button>
 <button class="home-category" data-home-category="Rook endings"><span class="cat-icon">♜</span><span><strong>Rook endings</strong><small>Active pieces & technique</small></span></button>
 <button class="home-category" data-home-category="all"><span class="cat-icon">♚</span><span><strong>All endgames</strong><small>Explore the library</small></span></button>
-</div><div class="home-footer"><span>Exercises completed</span><strong id="home-completed">0</strong></div></section><section id="path-screen" hidden aria-label="Guided learning path"><button id="path-back" class="path-back">← Home</button><div class="path-tag">ENDGAME ACADEMY</div><h2 class="path-heading">Learn the endgame</h2><p class="path-sub">Official Lichess Practice lessons, in learning order. Tap a lesson to train on Lichess with its original positions and instructions. Endgame Lab practice remains separate.</p><div id="path-count" style="font-size:12px;color:#b8cdca">0 of 0 completed</div><div class="path-progress"><div id="path-progress-fill" style="width:0%"></div></div><div id="path-lessons"></div></section><header><div class="brand"><button id="home-back" type="button">← Home</button><h1>♙ Endgame Lab</h1><small>Endgame training</small></div><div class="header-right"><button type="button" id="quick-sound" class="quick-sound" aria-label="Toggle sound">♪</button><span class="pill" id="engine-badge">Stockfish loading</span></div></header>
+</div><div class="home-footer"><span>Exercises completed</span><strong id="home-completed">0</strong></div></section><section id="path-screen" hidden aria-label="Guided learning path"><button id="path-back" class="path-back">← Home</button><div class="path-tag">ENDGAME ACADEMY</div><h2 class="path-heading">Learn the endgame</h2><p class="path-sub">Official Lichess Practice lessons, in learning order. Tap a lesson to train on Lichess with its original positions and instructions. Endgame Lab practice remains separate.</p><div id="path-count" style="font-size:12px;color:#b8cdca">0 of 0 completed</div><div class="path-progress"><div id="path-progress-fill" style="width:0%"></div></div><div id="path-lessons"></div></section><section id="library-screen" hidden aria-label="Choose an endgame exercise"><div class="library-top"><button class="library-back" id="library-back">← Home</button><span class="home-eyebrow">EXERCISE LIBRARY</span></div><h2 class="library-title" id="library-title">Choose an endgame</h2><p class="library-intro">Choose a position below to start training. Selecting a category only filters the list.</p><div class="library-tabs" id="library-tabs"></div><div class="library-list" id="library-list"></div></section><header><div class="brand"><button id="home-back" type="button">← Home</button><h1>♙ Endgame Lab</h1><small>Endgame training</small></div><div class="header-right"><button type="button" id="quick-sound" class="quick-sound" aria-label="Toggle sound">♪</button><span class="pill" id="engine-badge">Stockfish loading</span></div></header>
 <main>
 <div id="setup"></div>
 <section class="trainer">
@@ -154,6 +165,7 @@ body.training-active header,body.training-active main{animation:slideIn .28s cub
 <div class="notice" id="status" aria-live="polite">Preparing your endgame…</div>
 <nav class="actions"><button id="solution" class="secondary">✦ Best move</button><button id="undo" class="secondary">↶ Undo</button><button id="restart" class="secondary">↻ Restart</button><button id="next">Next win →</button></nav>
 </section>
+<button id="browse-lessons" type="button">☷ Browse exercises</button>
 <section class="settings-card">
 <div class="settings-top"><span class="eyebrow">TRAINING OPTIONS</span><button type="button" id="settings-toggle" class="linkbutton" aria-expanded="false">Customize <span id="toggle-arrow">⌄</span></button></div>
 <div id="settings-content" hidden><div class="sound-setting"><span>Move sounds</span><button type="button" id="sound-toggle" class="secondary" aria-pressed="true">On ♪</button></div>
@@ -212,7 +224,7 @@ function updateDrills(){
   $('goal').textContent='Checking';$('verification').textContent='Choose All positions to view candidates while verification runs.';status.textContent='No matching positions. Select All positions or another category.';return;
  }
  drill.disabled=false;drill.innerHTML=available.map(x=>`<option value="${x.i}">${completed.has(x.i)?'✓ ':''}${x[1]}${knownOutcome(x[2])?' · '+knownOutcome(x[2]).toUpperCase():''}</option>`).join('');
- current=available[0].i;drill.value=String(current);reset();
+ if(available.some(x=>x.i===current)){drill.value=String(current)}else{drill.value=String(available[0].i)}
 }
 function updateScanProgress(){
  const known=drills.filter(d=>knownOutcome(d[2])).length;
@@ -242,7 +254,7 @@ async function scanAll(onlyFailed=false){
    drill.innerHTML=options.length?options.map(x=>`<option value="${x.i}">${completed.has(x.i)?'✓ ':''}${x.d[1]} · ${filter.toUpperCase()}</option>`).join(''):'<option value="">Waiting for verified positions…</option>';
    drill.disabled=!options.length;
    if(options.some(x=>x.i===selectedIndex))drill.value=String(selectedIndex);
-   else if(options.length){current=options[0].i;drill.value=String(current);reset()}
+   else if(options.length){drill.value=String(options[0].i)}
   }
   await new Promise(resolve=>setTimeout(resolve,550));
  }
@@ -250,16 +262,21 @@ async function scanAll(onlyFailed=false){
 }
 function reset(){hideResult();generation++;$('drill-title').textContent=drills[current][1];if(engineReady)engineMessage("stop");game=new Chess(drills[current][2]);selected=null;history=[];busy=false;solution=null;$('description').textContent=drills[current][4];$('goal').textContent=drills[current][3];status.textContent='Checking the position with the Syzygy tablebase…';verified=false;verifiedGoal=null;tablebaseResult=null;$('goal').textContent='Checking…';$('verification').textContent='Checking exact result…';$('promotion').classList.remove('show');render();verifyDrill(generation)}
 function render(){if(!game)return;board.innerHTML='';const targets=selected?game.moves({square:selected,verbose:true}).map(m=>m.to):[];for(let r=7;r>=0;r--)for(let f=0;f<8;f++){const sq='abcdefgh'[f]+(r+1),p=game.get(sq),b=document.createElement('button');b.className='sq '+((f+r)%2===0?'dark ':'')+(p?' '+(p.color==='w'?'white':'black'):'')+(selected===sq?' selected':'')+(targets.includes(sq)?' target':'')+(solution?.from===sq?' solution-from':'')+(solution?.to===sq?' solution-to':'');b.innerHTML=p?pieceSvg(p):'';b.dataset.square=sq;b.setAttribute('aria-label',sq+(p?' '+p.color+p.type:''));b.onclick=()=>tap(sq);board.appendChild(b)}$('progress').textContent=completed.size;$('progress-label').textContent=completed.size+' completed';$('undo').disabled=!history.length||busy}
-function animateMove(move,piece){
- if(!move||!piece||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- const from=board.querySelector('[data-square="'+move.from+'"]'),to=board.querySelector('[data-square="'+move.to+'"]');
- if(!from||!to)return;
- const r=board.getBoundingClientRect(),a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
- const ghost=document.createElement('span');ghost.className='piece-ghost '+(piece.color==='w'?'white':'black');
- ghost.innerHTML=pieceSvg(piece);ghost.style.left=(a.left-r.left)+'px';ghost.style.top=(a.top-r.top)+'px';ghost.style.width=a.width+'px';ghost.style.height=a.height+'px';
+function moveSnapshot(from){
+ const el=board.querySelector('[data-square="'+from+'"]');
+ if(!el)return null;
+ const rect=el.getBoundingClientRect(),container=board.getBoundingClientRect();
+ return {left:rect.left-container.left,top:rect.top-container.top,width:rect.width,height:rect.height,html:el.innerHTML};
+}
+function animateMove(move,snapshot){
+ if(!move||!snapshot||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const to=board.querySelector('[data-square="'+move.to+'"]');if(!to)return;
+ const r=board.getBoundingClientRect(),b=to.getBoundingClientRect();
+ const ghost=document.createElement('span');ghost.className='piece-ghost';ghost.innerHTML=snapshot.html;
+ Object.assign(ghost.style,{left:snapshot.left+'px',top:snapshot.top+'px',width:snapshot.width+'px',height:snapshot.height+'px'});
  board.appendChild(ghost);to.classList.add('moving-destination');
- requestAnimationFrame(()=>requestAnimationFrame(()=>{ghost.style.transform=`translate(${b.left-a.left}px,${b.top-a.top}px)`}));
- setTimeout(()=>{ghost.remove();to.classList.remove('moving-destination')},260);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{ghost.style.transform=`translate(${b.left-r.left-snapshot.left}px,${b.top-r.top-snapshot.top}px)`}));
+ setTimeout(()=>{ghost.remove();to.classList.remove('moving-destination')},255);
 }
 function tap(sq){if(!verified||busy||!engineReady||game.isGameOver()||game.turn()!=='w')return;const p=game.get(sq);if(selected){const moves=game.moves({square:selected,verbose:true}).filter(m=>m.to===sq);if(moves.length){if(moves.some(m=>m.flags.includes('p'))){const promotion=$('promotion');promotion.innerHTML='';for(const piece of ['q','r','b','n']){const btn=document.createElement('button');btn.textContent=glyph['w'+piece];btn.onclick=()=>{promotion.classList.remove('show');doMove({from:selected,to:sq,promotion:piece})};promotion.appendChild(btn)}promotion.classList.add('show')}else doMove({from:selected,to:sq});return}}selected=p?.color==='w'?sq:null;render()}
 // Original, subtle Web Audio effects. No downloads or external audio files.
@@ -286,7 +303,7 @@ function playSound(type){
 function soundForMove(move){playSound(move?.captured?'capture':'move')}
 window.addEventListener('pointerdown',unlockAudio,{passive:true,capture:true});
 window.addEventListener('touchstart',unlockAudio,{passive:true,capture:true});
-function doMove(m){if(!engineReady||!verified)return;solution=null;const before=game.fen();let moved;let piece=game.get(m.from);try{moved=game.move(m)}catch{return}history.push(before);selected=null;render();animateMove(moved,piece);soundForMove(moved);if(checkEnd())return;busy=true;status.textContent='Computer thinking…';computerReply()}
+function doMove(m){if(!engineReady||!verified)return;solution=null;const before=game.fen();let moved;let snapshot=moveSnapshot(m.from);try{moved=game.move(m)}catch{return}history.push(before);selected=null;render();animateMove(moved,snapshot);soundForMove(moved);if(checkEnd())return;busy=true;status.textContent='Computer thinking…';computerReply()}
 function hideResult(){$('result-overlay').hidden=true}
 function showResult(kind,title,detail){
  playSound(kind==='win'?'win':kind==='loss'?'loss':'draw');
@@ -368,8 +385,8 @@ async function computerReply(){
  const gen=generation;const uci=await stockfishMove();
  if(gen!==generation)return;
  if(!uci){busy=false;if(!engineFailed)status.textContent='Stockfish could not provide a move.';render();return}
- let move,piece=game.get(uci.slice(0,2));try{move=game.move(uciToMove(uci))}catch{failEngine('Stockfish returned an invalid move.');return}
- busy=false;render();animateMove(move,piece);soundForMove(move);
+ let move,snapshot=moveSnapshot(uci.slice(0,2));try{move=game.move(uciToMove(uci))}catch{failEngine('Stockfish returned an invalid move.');return}
+ busy=false;render();animateMove(move,snapshot);soundForMove(move);
  if(!checkEnd())status.textContent='Your move. '+(game.isCheck()?'You are in check.':'');
 }
 async function showBestMove(){
@@ -462,12 +479,13 @@ try{if(localStorage.getItem('endgame-lab-course-version')!=='2026-10-course5'){
  localStorage.setItem('endgame-lab-course-version','2026-10-course5');
 }}catch{}
 // Home screen, guided curriculum and app navigation.
-const homeScreen=document.getElementById('home-screen'),pathScreen=document.getElementById('path-screen');
+const homeScreen=document.getElementById('home-screen'),pathScreen=document.getElementById('path-screen'),libraryScreen=document.getElementById('library-screen');
 const transitionMs=235;
 function reveal(screen){
- for(const el of [homeScreen,pathScreen]){el.hidden=el!==screen;el.classList.remove('page-leaving');}
+ for(const el of [homeScreen,pathScreen,libraryScreen]){el.hidden=el!==screen;el.classList.remove('page-leaving');}
  document.body.classList.toggle('home-active',screen===homeScreen);
  document.body.classList.toggle('path-active',screen===pathScreen);
+ document.body.classList.toggle('library-active',screen===libraryScreen);
  document.body.classList.toggle('training-active',!screen);
  window.scrollTo(0,0);
 }
@@ -504,20 +522,27 @@ function showPath(){
  });
  reveal(pathScreen);
 }
-function openTraining(cat){
- if(cat){
-  const select=category;
-  const desired=cat==='Basic mates'?['Basic mates','Queen mates','Rook mates']:[cat];
-  const option=[...select.options].find(o=>cat==='all'?o.value==='all':desired.includes(o.value));
-  if(option){select.value=option.value;select.dispatchEvent(new Event('change'))}
- }
- reveal(null);
+let libraryCategory='all';
+function categoryOf(d){const n=d[0].toLowerCase(),title=d[1].toLowerCase();if(n.includes('rook')||title.includes('rook'))return 'Rook endings';if(n.includes('pawn')||title.includes('pawn')||title.includes('réti')||title.includes('saavedra'))return 'Pawn endings';if(n.includes('mate'))return 'Checkmates';return 'Other studies'}
+function showLibrary(cat='all'){
+ libraryCategory=cat==='Basic mates'?'Checkmates':cat;
+ const tabs=document.getElementById('library-tabs'),list=document.getElementById('library-list');tabs.replaceChildren();list.replaceChildren();
+ const groups=[['all','All positions'],['Pawn endings','Pawn endings'],['Rook endings','Rook endings'],['Other studies','Other studies'],['Checkmates','Checkmates']];
+ for(const [id,name] of groups){const n=drills.filter(d=>id==='all'||categoryOf(d)===id).length;if(!n&&id!=='all')continue;const b=document.createElement('button');b.textContent=name+' · '+n;b.className=libraryCategory===id?'active':'';b.onclick=()=>showLibrary(id);tabs.append(b)}
+ const entries=drills.map((d,i)=>({d,i})).filter(x=>libraryCategory==='all'||categoryOf(x.d)===libraryCategory);
+ document.getElementById('library-title').textContent=libraryCategory==='all'?'Choose an endgame':libraryCategory;
+ if(!entries.length){const e=document.createElement('p');e.className='library-empty';e.textContent='No exercises in this category yet.';list.append(e)}
+ entries.forEach(({d,i})=>{const b=document.createElement('button');b.className='library-item';const info=document.createElement('span');info.style.flex='1';const title=document.createElement('strong');title.textContent=d[1];const sub=document.createElement('small');sub.textContent=categoryOf(d)+' · '+(d[2].split(' ')[1]==='w'?'White':'Black')+' to move · '+d[3];info.append(title,sub);if(completed.has(i)){const check=document.createElement('span');check.className='library-check';check.textContent='✓';b.append(check)}b.append(info);const arrow=document.createElement('span');arrow.className='library-arrow';arrow.textContent='›';b.append(arrow);b.onclick=()=>{current=i;category.value='all';$('outcome-filter').value='browse';updateDrills();drill.value=String(i);localStorage.setItem('endgame-lab-last-drill',String(i));reset();reveal(null)};list.append(b)});
+ reveal(libraryScreen);
 }
+function openTraining(cat){showLibrary(cat||'all')}
 function openHome(){homeStats();reveal(homeScreen)}
 document.getElementById('home-back').addEventListener('click',()=>{
- if(category.value==='Guided path')showPath();else openHome();
+ showLibrary(category.value==='all'?'all':category.value);
 });
 document.getElementById('path-back').addEventListener('click',openHome);
+document.getElementById('library-back').addEventListener('click',openHome);
+document.getElementById('browse-lessons').addEventListener('click',()=>showLibrary('all'));
 document.getElementById('home-guided').addEventListener('click',showPath);
 document.getElementById('home-continue').addEventListener('click',()=>{
  const prev=localStorage.getItem('endgame-lab-last-drill');
@@ -526,7 +551,7 @@ document.getElementById('home-continue').addEventListener('click',()=>{
   const all=[...category.options].find(o=>o.value==='all');if(all){category.value='all';category.dispatchEvent(new Event('change'))}
   if([...drill.options].some(o=>o.value===prev)){drill.value=prev;drill.dispatchEvent(new Event('change'))}
  }
- openTraining();
+ if(current>=0&&game){reveal(null)}else showLibrary('all');
 });
 document.querySelectorAll('[data-home-category]').forEach(b=>b.addEventListener('click',()=>openTraining(b.dataset.homeCategory)));
 try{homeStats()}catch{}
