@@ -145,16 +145,19 @@ body.training-active header,body.training-active main{animation:slideIn .28s cub
 #browse-lessons{width:100%;margin:12px 0 0;padding:13px;border-radius:12px;background:#203c3a;border:1px solid #3e6258;color:#dcefe6;font-weight:750}
 .board{position:relative;overflow:hidden}.piece-ghost{position:absolute;z-index:12;pointer-events:none;transition:transform 230ms cubic-bezier(.18,.72,.24,1);will-change:transform;display:grid;place-items:center}.sq.moving-destination>.piece-svg{visibility:hidden}
 @media(prefers-reduced-motion:reduce){.piece-ghost{transition:none!important}}
+</style><style>
+#guided-detail{position:fixed;inset:0;z-index:96;overflow-y:auto;background:radial-gradient(ellipse at 15% 0%,#203943 0%,#101b24 46%,#0b1219 100%);color:#e9f0ee;padding:calc(env(safe-area-inset-top) + 22px) max(20px,calc((100vw - 510px)/2)) calc(env(safe-area-inset-bottom) + 30px)}#guided-detail[hidden]{display:none}
+.guided-diagram{width:min(100%,390px);margin:18px auto;display:grid;grid-template-columns:repeat(8,1fr);aspect-ratio:1;border:5px solid #314b43;border-radius:5px;overflow:hidden}.guided-square{display:grid;place-items:center;font-size:clamp(22px,7vw,38px);line-height:1}.guided-square.light{background:#e6e9d9}.guided-square.dark{background:#83a493}.guided-square .wpiece{color:#fff;text-shadow:0 2px 2px #263b33,-1px -1px #263b33,1px 1px #263b33}.guided-square .bpiece{color:#202b2a;text-shadow:0 1px 1px #c9d3c9}.guided-content{max-width:620px;margin:12px auto 40px;color:#d7e5de}.guided-content h3{font-size:17px;margin:20px 0 6px;color:#d8eee0}.guided-content p{line-height:1.6}.guided-primary{display:block;width:100%;margin-top:22px;padding:16px;border:0;border-radius:12px;background:#b8d5c8;color:#19312c;font-size:16px;font-weight:800}.guided-note{font-size:12px;color:#a6bdb1}.guided-chapter{padding:14px 0;border-top:1px solid #405b50}.guided-chapter h3{margin:0 0 5px}.guided-chapter p{color:#a6bdb1;font-size:13px;margin:0 0 12px}.guided-resource{font-size:13px;color:#b8d5c8;margin:16px 0}
 </style></head><body class="home-active"><section id="home-screen" aria-label="Endgame Lab home">
 <div class="home-brand"><div class="home-logo">♔</div><div><strong>Endgame Lab</strong><small>MASTER THE ENDGAME</small></div></div>
 <div class="home-eyebrow">YOUR NEXT SESSION</div>
 <div class="home-hero"><h2 id="home-continue-title">Ready to train?</h2><p id="home-continue-sub">Practice the positions that decide games.</p><button class="home-primary" id="home-continue">Continue training →</button></div>
-<button id="home-guided" class="home-category" style="width:100%;min-height:104px;margin-bottom:25px;flex-direction:row;align-items:center;gap:16px"><span class="cat-icon">♙</span><span style="flex:1"><strong style="font-size:17px">Guided learning path</strong><small>Official Lichess lessons · Original positions</small></span><span style="font-size:22px;color:#b8d5c8">›</span></button><h2 class="home-section-title">Training library</h2><div class="home-categories">
+<button id="home-guided" class="home-category" style="width:100%;min-height:104px;margin-bottom:25px;flex-direction:row;align-items:center;gap:16px"><span class="cat-icon">♙</span><span style="flex:1"><strong style="font-size:17px">Guided learning path</strong><small>Interactive lessons · Published positions</small></span><span style="font-size:22px;color:#b8d5c8">›</span></button><h2 class="home-section-title">Training library</h2><div class="home-categories">
 <button class="home-category" data-home-category="Basic mates"><span class="cat-icon">♛</span><span><strong>Checkmates</strong><small>Finish with precision</small></span></button>
 <button class="home-category" data-home-category="Pawn endings"><span class="cat-icon">♙</span><span><strong>Pawn endings</strong><small>Opposition & promotion</small></span></button>
 <button class="home-category" data-home-category="Rook endings"><span class="cat-icon">♜</span><span><strong>Rook endings</strong><small>Active pieces & technique</small></span></button>
 <button class="home-category" data-home-category="all"><span class="cat-icon">♚</span><span><strong>All endgames</strong><small>Explore the library</small></span></button>
-</div><div class="home-footer"><span>Exercises completed</span><strong id="home-completed">0</strong></div></section><section id="path-screen" hidden aria-label="Guided learning path"><button id="path-back" class="path-back">← Home</button><div class="path-tag">ENDGAME ACADEMY</div><h2 class="path-heading">Learn the endgame</h2><p class="path-sub">Official Lichess Practice lessons, in learning order. Tap a lesson to train on Lichess with its original positions and instructions. Endgame Lab practice remains separate.</p><div id="path-count" style="font-size:12px;color:#b8cdca">0 of 0 completed</div><div class="path-progress"><div id="path-progress-fill" style="width:0%"></div></div><div id="path-lessons"></div></section><section id="library-screen" hidden aria-label="Choose an endgame exercise"><div class="library-top"><button class="library-back" id="library-back">← Home</button><span class="home-eyebrow">EXERCISE LIBRARY</span></div><h2 class="library-title" id="library-title">Choose an endgame</h2><p class="library-intro">Choose a position below to start training. Selecting a category only filters the list.</p><div class="library-tabs" id="library-tabs"></div><div class="library-list" id="library-list"></div></section><header><div class="brand"><button id="home-back" type="button">← Home</button><h1>♙ Endgame Lab</h1><small>Endgame training</small></div><div class="header-right"><button type="button" id="quick-sound" class="quick-sound" aria-label="Toggle sound">♪</button><span class="pill" id="engine-badge">Stockfish loading</span></div></header>
+</div><div class="home-footer"><span>Exercises completed</span><strong id="home-completed">0</strong></div></section><section id="path-screen" hidden aria-label="Guided learning path"><button id="path-back" class="path-back">← Home</button><div class="path-tag">ENDGAME ACADEMY</div><h2 class="path-heading">Learn the endgame</h2><p class="path-sub">Study the actual published position, understand the plan, then play it yourself. Select a chapter, then a lesson. No positions are rearranged.</p><div id="path-count" style="font-size:12px;color:#b8cdca">0 of 0 completed</div><div class="path-progress"><div id="path-progress-fill" style="width:0%"></div></div><div id="path-lessons"></div></section><section id="guided-detail" hidden aria-label="Guided lesson"><button id="guided-detail-back" class="path-back">← All lessons</button><div class="path-tag" id="guided-source">SOURCE POSITION</div><h2 class="path-heading" id="guided-title"></h2><p class="path-sub" id="guided-description"></p><div class="guided-diagram" id="guided-diagram"></div><div class="guided-content"><h3>Read the board</h3><p id="guided-observe"></p><h3>Understand the plan</h3><p id="guided-plan"></p><h3>Think before moving</h3><p id="guided-question"></p><button id="guided-train" class="guided-primary">Play this exact position →</button><p class="guided-note">The objective is checked against the available tablebase when applicable. This course uses original explanations; it does not copy book commentary.</p></div></section><section id="library-screen" hidden aria-label="Choose an endgame exercise"><div class="library-top"><button class="library-back" id="library-back">← Home</button><span class="home-eyebrow">EXERCISE LIBRARY</span></div><h2 class="library-title" id="library-title">Choose an endgame</h2><p class="library-intro">Choose a position below to start training. Selecting a category only filters the list.</p><div class="library-tabs" id="library-tabs"></div><div class="library-list" id="library-list"></div></section><header><div class="brand"><button id="home-back" type="button">← Home</button><h1>♙ Endgame Lab</h1><small>Endgame training</small></div><div class="header-right"><button type="button" id="quick-sound" class="quick-sound" aria-label="Toggle sound">♪</button><span class="pill" id="engine-badge">Stockfish loading</span></div></header>
 <main>
 <div id="setup"></div>
 <section class="trainer">
@@ -482,9 +485,9 @@ try{if(localStorage.getItem('endgame-lab-course-version')!=='2026-10-course5'){
 const homeScreen=document.getElementById('home-screen'),pathScreen=document.getElementById('path-screen'),libraryScreen=document.getElementById('library-screen');
 const transitionMs=235;
 function reveal(screen){
- for(const el of [homeScreen,pathScreen,libraryScreen]){el.hidden=el!==screen;el.classList.remove('page-leaving');}
+ for(const el of [homeScreen,pathScreen,libraryScreen,document.getElementById('guided-detail')]){el.hidden=el!==screen;el.classList.remove('page-leaving');}
  document.body.classList.toggle('home-active',screen===homeScreen);
- document.body.classList.toggle('path-active',screen===pathScreen);
+ document.body.classList.toggle('path-active',screen===pathScreen||screen===document.getElementById('guided-detail'));
  document.body.classList.toggle('library-active',screen===libraryScreen);
  document.body.classList.toggle('training-active',!screen);
  window.scrollTo(0,0);
@@ -496,32 +499,55 @@ function homeStats(){
  document.getElementById('home-continue-title').textContent=last?last[1]:'Ready to train?';
  document.getElementById('home-continue-sub').textContent=last?last[0]+' · Pick up where you left off.':'Practice the positions that decide games.';
 }
-const lichessLessons=[
- ['Pawn Endgames','Key Squares','Reach the critical squares with your king.','https://lichess.org/practice/pawn-endgames/practicestnamkeysquares/xebrDvFe'],
- ['Pawn Endgames','Opposition','Learn the king opposition technique.','https://lichess.org/practice/pawn-endgames/practicestnamopposition/A4ujYOer'],
- ['Pawn Endgames','7th-Rank Rook Pawn Versus a Queen','Explore this tricky pawn-versus-queen ending.','https://lichess.org/practice'],
- ['Rook Endgames','7th-Rank Rook Pawn and Passive Rook vs Rook','Practice defensive and attacking rook technique.','https://lichess.org/practice'],
- ['Rook Endgames','Basic Rook Endgames','Lucena and Philidor fundamentals.','https://lichess.org/practice/rook-endgames/practicestnambasicrookendgames/pqUSUw8Y'],
- ['Rook Endgames','Intermediate Rook Endings','Extend your understanding of rook endings.','https://lichess.org/practice/rook-endgames/practicestnamintermediaterookendings/heQDnvq7'],
- ['Rook Endgames','Practical Rook Endings','Play realistic rook endings with several pawns.','https://lichess.org/practice/rook-endgames/practicestnampracticalrookendings/wS23j5Tm']
+const guidedChapters=[
+ {name:'01 · King & pawn technique',desc:'King routes, promotion races, active defense.',lessons:[20,21,26]},
+ {name:'02 · Essential rook endings',desc:'Philidor, Lucena, building a bridge and defensive setups.',lessons:[0,1,2,3,7]},
+ {name:'03 · Rooks & passed pawns',desc:'Activity, stopping promotion and converting extra pawns.',lessons:[4,5,9,12,13,14,15,17,18]},
+ {name:'04 · Practical studies',desc:'Calculate exact moves and discover surprising resources.',lessons:[22,23,24,25,27,28]}
 ];
+const lessonNotes={
+ 0:['Black is defending against an advanced white pawn. Notice the active white king and the rook placement.','The defender needs active rook checks and the correct rank of defense; passive waiting can be fatal.','Where can Black keep the white king from advancing without allowing the pawn to queen?'],
+ 1:['The defending rook is on the second rank and White has a centralized king.','Look for a route into a known defensive setup rather than checking at random.','Which checking direction gives Black time to establish the defense?'],
+ 2:['White has a pawn on the seventh rank, a king in front of it, and a rook available to shelter the king.','The Lucena idea is to use the rook to create a shield from sideways checks. The precise order matters.','How can White create a safe square for the king without losing the pawn?'],
+ 3:['White is close to promotion but Black can check from the side.','Calculate the king escape route and the rook placement needed to stop repeated checks.','Which rook move changes the checking geometry?'],
+ 20:['White has a pawn on c6; Black has a pawn on h5. White’s king looks impossibly far from both objectives.','The king can threaten to support its own pawn and stop the enemy pawn simultaneously. This is the famous Réti geometric resource.','What king route preserves both threats?'],
+ 21:['Black has an advanced a-pawn; White has a b-pawn and an active king.','Do not assume the closest pawn is the one to chase. Count tempos and calculate both promotion races.','Can the white king make progress without letting the a-pawn escape?'],
+ 22:['The white c-pawn is almost promoted, but Black has a rook checking from behind.','Promoting to a queen is not always the winning move. Examine stalemate traps and alternatives.','Which promotion piece keeps a winning threat?'],
+ 23:['White has a queen and knight against a queen, with both kings exposed.','In queen endings, checks and mating threats dominate material considerations. Look for forcing moves first.','Which checks improve the knight’s contribution?'],
+ 24:['White’s rook must contend with advanced black pawns on opposite wings.','The order of rook moves can determine whether a pawn promotes. Count each pawn’s remaining moves.','Which pawn is the immediate threat, and can the rook stop both?'],
+ 25:['White has a rook but Black has several passed pawns.','A rook is powerful only if it can stop promotion in time. Calculate concrete checks and king moves.','What is the forcing sequence that keeps the rook useful?'],
+ 26:['White has a more active king and pawns on the kingside.','King activity is often more valuable than a premature pawn push. Look for penetration squares and zugzwang.','Where should the king head before changing the pawn structure?'],
+ 27:['A black pawn on b2 is one step from promotion; White has rook and knight against bishop.','Urgency matters: calculate promotion threats before considering slower material gains.','What forcing resource stops the b-pawn?'],
+ 28:['Both sides have advanced pawns and opposite-colored bishops.','Promotion races are about tempi, control of promotion squares and bishop diagonals.','Which pawn push creates a threat Black cannot ignore?']
+};
+let activeGuided=null;
+function drawGuidedDiagram(fen){
+ const el=document.getElementById('guided-diagram');el.replaceChildren();
+ const rows=fen.split(' ')[0].split('/');const symbols={K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙',k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+ rows.forEach((row,r)=>{let c=0;for(const ch of row){if(/^[1-8]$/.test(ch)){for(let j=0;j<Number(ch);j++)add(null)}else add(ch)}function add(piece){const sq=document.createElement('span');sq.className='guided-square '+((r+c)%2?'dark':'light');if(piece){const span=document.createElement('span');span.className=piece===piece.toUpperCase()?'wpiece':'bpiece';span.textContent=symbols[piece];sq.append(span)}el.append(sq);c++}});
+}
+function showGuidedDetail(index){
+ activeGuided=index;const d=drills[index],notes=lessonNotes[index]||[d[4],'Assess king activity, passed pawns and the opponent’s immediate threats.','Which move most improves your position while meeting the opponent’s threat?'];
+ document.getElementById('guided-title').textContent=d[1];
+ document.getElementById('guided-source').textContent=d[0].includes('Lichess')?'SOURCE · LICHESS STUDY':'SOURCE · PUBLISHED ENDGAME STUDY';
+ document.getElementById('guided-description').textContent=d[3]+' · '+(d[2].split(' ')[1]==='w'?'White':'Black')+' to move · Original position unchanged';
+ document.getElementById('guided-observe').textContent=notes[0];document.getElementById('guided-plan').textContent=notes[1];document.getElementById('guided-question').textContent=notes[2];
+ drawGuidedDiagram(d[2]);reveal(document.getElementById('guided-detail'));
+}
 function showPath(){
  const list=document.getElementById('path-lessons');list.replaceChildren();
- document.getElementById('path-count').textContent='7 official Lichess lesson groups · Opens on Lichess';
- document.getElementById('path-progress-fill').style.width='0%';
- let last='';
- lichessLessons.forEach((lesson,i)=>{
-  if(lesson[0]!==last){const heading=document.createElement('h3');heading.textContent=lesson[0];heading.style.cssText='margin:24px 0 12px;font-size:15px;color:#a8c8bb';list.append(heading);last=lesson[0]}
-  const b=document.createElement('button');b.type='button';b.className='path-item';
-  const num=document.createElement('span');num.className='path-num';num.textContent=String(i+1).padStart(2,'0');
-  const info=document.createElement('span');info.className='path-info';
-  const title=document.createElement('strong');title.textContent=lesson[1];
-  const detail=document.createElement('small');detail.textContent=lesson[2]+' · Open official Lichess lesson ↗';
-  info.append(title,detail);b.append(num,info);list.append(b);
-  b.addEventListener('click',()=>window.open(lesson[3],'_blank','noopener,noreferrer'));
+ const total=guidedChapters.reduce((n,c)=>n+c.lessons.length,0);
+ document.getElementById('path-count').textContent=total+' sourced positions · 4 chapters · Select a lesson to preview';
+ document.getElementById('path-progress-fill').style.width=(100*guidedChapters.reduce((n,c)=>n+c.lessons.filter(i=>completed.has(i)).length,0)/total)+'%';
+ guidedChapters.forEach(ch=>{
+  const section=document.createElement('div');section.className='guided-chapter';const h=document.createElement('h3');h.textContent=ch.name;const p=document.createElement('p');p.textContent=ch.desc;section.append(h,p);
+  ch.lessons.forEach((index,k)=>{const d=drills[index];if(!d)return;const b=document.createElement('button');b.type='button';b.className='path-item';const num=document.createElement('span');num.className='path-num';num.textContent=completed.has(index)?'✓':String(k+1).padStart(2,'0');const info=document.createElement('span');info.className='path-info';const t=document.createElement('strong');t.textContent=d[1];const detail=document.createElement('small');detail.textContent=(d[2].split(' ')[1]==='w'?'White':'Black')+' to move · '+d[3]+' · Preview lesson';info.append(t,detail);b.append(num,info);b.onclick=()=>showGuidedDetail(index);section.append(b)});list.append(section);
  });
- reveal(pathScreen);
+ const resource=document.createElement('p');resource.className='guided-resource';resource.textContent='Further reading: Capablanca — Chess Fundamentals (1921); Edward Lasker — Chess Strategy (1915). Book positions are not yet imported. ';
+ const a=document.createElement('a');a.href='https://www.gutenberg.org/ebooks/33870';a.target='_blank';a.rel='noopener';a.textContent='Read Capablanca ↗';resource.append(a);list.append(resource);reveal(pathScreen);
 }
+document.getElementById('guided-detail-back').addEventListener('click',showPath);
+document.getElementById('guided-train').addEventListener('click',()=>{if(activeGuided===null)return;const i=activeGuided;current=i;category.value='all';$('outcome-filter').value='browse';updateDrills();drill.value=String(i);localStorage.setItem('endgame-lab-last-drill',String(i));reset();reveal(null)});
 let libraryCategory='all';
 function categoryOf(d){const n=d[0].toLowerCase(),title=d[1].toLowerCase();if(n.includes('rook')||title.includes('rook'))return 'Rook endings';if(n.includes('pawn')||title.includes('pawn')||title.includes('réti')||title.includes('saavedra'))return 'Pawn endings';if(n.includes('mate'))return 'Checkmates';return 'Other studies'}
 function showLibrary(cat='all'){
